@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blynk IoT Platform Mockup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="logo-section">
+                <div class="logo-icon">B</div>
+                <div class="logo-text">iot<span>FITM</span></div>
+            </div>
+            <div class="header-actions">
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span id="deviceStatusText">ESP32 Online</span>
+                </div>
+                <div class="auth-token-box">
+                    <span class="auth-token-label">Auth Token:</span>
+                    <span class="auth-token-value" id="authToken">bl_x92kLpQ0918saBvcXzQWp</span>
+                    <button class="copy-btn" id="copyTokenBtn" title="Copy Auth Token">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <!-- Left Sidebar (Toolbox & Simulation) -->
+            <aside class="sidebar-left">
+                <!-- Widget Toolbox -->
+                <div class="toolbox-section">
+                    <h2 class="sidebar-title">Add Widgets</h2>
+                    <div class="widget-btn-grid">
+                        <button class="toolbox-btn" id="addGaugeBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><path d="M12 12m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"></path><path d="M12 12l3.5-3.5"></path></svg>
+                            <span>Gauge</span>
+                        </button>
+                        <button class="toolbox-btn" id="addButtonBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="12" cy="12" r="4"></circle></svg>
+                            <span>Button</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hardware Board Simulator -->
+                <div class="simulator-section">
+                    <div class="simulator-title-row">
+                        <h2 class="sidebar-title" style="margin-bottom:0;">Device Simulator</h2>
+                    </div>
+                    
+                    <div class="sim-board">
+                        <span class="board-label">ESP32 Dev Module</span>
+                        
+                        <!-- Slider for Virtual Temp sensor V0 -->
+                        <div class="sim-slider-group">
+                            <div class="sim-slider-label">
+                                <span>Temp Sensor</span>
+                                <span class="pin">V0</span>
+                            </div>
+                            <input type="range" class="sim-slider" id="simSliderV0" min="0" max="100" value="28">
+                        </div>
+
+                        <!-- Slider for Virtual Humidity sensor V1 -->
+                        <div class="sim-slider-group">
+                            <div class="sim-slider-label">
+                                <span>Humidity Sensor</span>
+                                <span class="pin">V1</span>
+                            </div>
+                            <input type="range" class="sim-slider" id="simSliderV1" min="0" max="100" value="62">
+                        </div>
+
+                        <!-- LEDs monitoring button switch outputs V2 & V3 -->
+                        <div class="sim-led-group">
+                            <div class="sim-led-container">
+                                <div class="sim-led" id="simLedV2"></div>
+                                <span>LED V2</span>
+                            </div>
+                            <div class="sim-led-container">
+                                <div class="sim-led" id="simLedV3"></div>
+                                <span>LED V3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Dashboard Canvas Area -->
+            <section class="dashboard-canvas">
+                <div class="canvas-header">
+                    <div>
+                        <h1 class="canvas-title">Smart Home Dashboard</h1>
+                        <p class="canvas-subtitle">Drag-simulation reactive widgets</p>
+                    </div>
+                </div>
+
+                <!-- Widgets Grid -->
+                <div class="widget-grid" id="widgetGrid">
+                    <!-- Widgets dynamically injected here by JS -->
+                </div>
+            </section>
+
+            <!-- Widget Configuration Panel (Right Slide-out) -->
+            <aside class="sidebar-right" id="configSidebar">
+                <div class="config-header">
+                    <h3 class="config-title">Widget Settings</h3>
+                    <button class="close-config-btn" id="closeConfigBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+
+                <!-- Settings Form -->
+                <form id="configForm" onsubmit="event.preventDefault();">
+                    <input type="hidden" id="configWidgetId">
+                    
+                    <div class="form-group">
+                        <label for="configTitle">Widget Title</label>
+                        <input type="text" id="configTitle" class="form-input" placeholder="e.g. Living Room Temp">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="configPin">Virtual Pin (Datastream)</label>
+                        <select id="configPin" class="form-input">
+                            <option value="V0">V0 (Temp Slider)</option>
+                            <option value="V1">V1 (Humidity Slider)</option>
+                            <option value="V2">V2 (LED 1)</option>
+                            <option value="V3">V3 (LED 2)</option>
+                            <option value="V4">V4 (Custom/Unbound)</option>
+                            <option value="V5">V5 (Custom/Unbound)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Color Theme</label>
+                        <div class="color-picker" id="configColorPicker">
+                            <div class="color-pill pill-cyan" data-theme="cyan"></div>
+                            <div class="color-pill pill-magenta" data-theme="magenta"></div>
+                            <div class="color-pill pill-emerald" data-theme="emerald"></div>
+                            <div class="color-pill pill-amber" data-theme="amber"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gauge specific inputs -->
+                    <div id="gaugeConfigGroup">
+                        <div class="form-group">
+                            <label for="configUnit">Unit</label>
+                            <input type="text" id="configUnit" class="form-input" placeholder="e.g. °C, %">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div class="form-group">
+                                <label for="configMin">Min Value</label>
+                                <input type="number" id="configMin" class="form-input" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="configMax">Max Value</label>
+                                <input type="number" id="configMax" class="form-input" value="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button specific inputs -->
+                    <div id="buttonConfigGroup">
+                        <div class="form-group">
+                            <label for="configButtonMode">Mode</label>
+                            <select id="configButtonMode" class="form-input">
+                                <option value="switch">Switch (Latch)</option>
+                                <option value="push">Push (Momentary)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="saveConfigBtn" style="width: 100%; margin-top: 1.5rem;">Apply Changes</button>
+                </form>
+            </aside>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div class="toast" id="toast">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span id="toastMessage">Action successful</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
